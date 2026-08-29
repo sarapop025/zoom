@@ -1,0 +1,50 @@
+          ┌───────────────┐
+                    │     USERS     │
+                    │───────────────│
+                    │ PK user_id    │
+                    │ username      │
+                    │ password      │
+                    │ full_name     │
+                    │ role          │
+                    │ status        │
+                    └───────┬───────┘
+                            │
+                       1    │    N
+                            │
+              ┌─────────────▼─────────────┐
+              │         PROJECTS          │
+              │───────────────────────────│
+              │ PK project_id             │
+              │ FK category_id            │
+              │ FK created_by             │
+              │ project_name              │
+              │ project_date              │
+              │ location                  │
+              │ status                    │
+              └─────────────┬─────────────┘
+                            │
+                       1    │    N
+                            │
+              ┌─────────────▼─────────────┐
+              │          PHOTOS           │
+              │───────────────────────────│
+              │ PK photo_id               │
+              │ FK project_id             │
+              │ FK uploaded_by            │
+              │ photo_name                │
+              │ file_name                 │
+              │ file_path                 │
+              │ status                    │
+              │ created_at                │
+              └───────────────────────────┘
+                            ▲
+                            │
+                       N    │    1
+                            │
+                    ┌───────┴───────┐
+                    │   CATEGORIES  │
+                    │───────────────│
+                    │ PK category_id│
+                    │ category_name │
+                    │ description   │
+                    └───────────────┘
