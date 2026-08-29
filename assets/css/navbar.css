@@ -1,0 +1,18 @@
+.navbar {
+    min-height: 68px;
+    background: #062b63;
+}
+
+.navbar-brand {
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.navbar-user {
+    color: #fff;
+    font-size: 13px;
+}
+
+.navbar .btn {
+    border-radius: 8px;
+}

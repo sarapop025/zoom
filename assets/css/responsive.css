@@ -1,0 +1,58 @@
+@media (max-width: 992px) {
+
+    .sidebar {
+        width: 210px;
+    }
+
+    .main {
+        margin-left: 210px;
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    .sidebar {
+        display: none;
+    }
+
+    .main {
+        margin-left: 0;
+
+        padding:
+            90px
+            15px
+            30px;
+    }
+
+    .navbar-user {
+        display: none;
+    }
+
+    .page-title {
+        font-size: 21px;
+    }
+
+    .cover,
+    .cover-empty,
+    .photo-cover,
+    .photo-empty {
+        height: 180px;
+    }
+
+}
+
+@media (max-width: 576px) {
+
+    .main {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .project-actions .btn,
+    .photo-actions .btn {
+        padding:
+            5px 8px;
+    }
+
+}

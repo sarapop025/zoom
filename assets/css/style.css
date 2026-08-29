@@ -1,0 +1,67 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #f5f7fb;
+    color: #1f2937;
+    font-family:
+        "Noto Sans Thai",
+        Tahoma,
+        Arial,
+        sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
+
+.btn {
+    border-radius: 8px;
+}
+
+.form-control,
+.form-select {
+    min-height: 43px;
+    border-radius: 8px;
+}
+
+.page-title {
+    color: #082d63;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.page-subtitle {
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.filter-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, .03);
+}
+
+.empty-box {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    text-align: center;
+    padding: 75px 20px;
+    color: #9ca3af;
+}
+
+.empty-box i {
+    display: block;
+    font-size: 60px;
+    margin-bottom: 15px;
+}
