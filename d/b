@@ -1,0 +1,337 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.0
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost
+-- Generation Time: Aug 29, 2026 at 09:26 AM
+-- Server version: 10.4.27-MariaDB
+-- PHP Version: 7.4.33
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `psu_photo_system`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `activity_logs`
+--
+
+CREATE TABLE `activity_logs` (
+  `log_id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED DEFAULT NULL,
+  `action` varchar(100) NOT NULL,
+  `table_name` varchar(100) DEFAULT NULL,
+  `record_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `user_agent` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `approvals`
+--
+
+CREATE TABLE `approvals` (
+  `approval_id` bigint(20) UNSIGNED NOT NULL,
+  `photo_id` bigint(20) UNSIGNED NOT NULL,
+  `approved_by` int(10) UNSIGNED NOT NULL,
+  `action` enum('APPROVE','REJECT','PUBLISH','HIDE') NOT NULL,
+  `comment` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `categories`
+--
+
+CREATE TABLE `categories` (
+  `category_id` int(10) UNSIGNED NOT NULL,
+  `category_name` varchar(150) NOT NULL,
+  `description` text DEFAULT NULL,
+  `status` enum('ACTIVE','INACTIVE') NOT NULL DEFAULT 'ACTIVE',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `categories`
+--
+
+INSERT INTO `categories` (`category_id`, `category_name`, `description`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'กิจกรรมวิชาการ', 'กิจกรรมด้านการเรียนการสอนและวิชาการ', 'ACTIVE', '2026-08-25 15:42:57', '2026-08-25 15:42:57'),
+(2, 'กิจกรรมนักเรียน', 'กิจกรรมที่เกี่ยวข้องกับนักเรียน', 'ACTIVE', '2026-08-25 15:42:57', '2026-08-25 15:42:57'),
+(3, 'กิจกรรมกีฬา', 'กิจกรรมการแข่งขันและการส่งเสริมกีฬา', 'ACTIVE', '2026-08-25 15:42:57', '2026-08-25 15:42:57'),
+(4, 'กิจกรรมคุณธรรมและจริยธรรม', 'กิจกรรมด้านคุณธรรม จริยธรรม และการพัฒนาผู้เรียน', 'ACTIVE', '2026-08-25 15:42:57', '2026-08-25 15:42:57'),
+(5, 'กิจกรรมศิลปวัฒนธรรม', 'กิจกรรมด้านศิลปะ วัฒนธรรม และประเพณี', 'ACTIVE', '2026-08-25 15:42:57', '2026-08-25 15:42:57'),
+(6, 'กิจกรรมบริการวิชาการ', 'กิจกรรมบริการวิชาการแก่ชุมชนและสังคม', 'ACTIVE', '2026-08-25 15:42:57', '2026-08-25 15:42:57'),
+(7, 'กิจกรรมโรงเรียน', 'กิจกรรมทั่วไปของโรงเรียน', 'ACTIVE', '2026-08-25 15:42:57', '2026-08-25 15:42:57'),
+(8, 'โครงการพิเศษ', 'โครงการหรือกิจกรรมพิเศษของโรงเรียน', 'ACTIVE', '2026-08-25 15:42:57', '2026-08-25 15:42:57');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `photos`
+--
+
+CREATE TABLE `photos` (
+  `photo_id` bigint(20) UNSIGNED NOT NULL,
+  `project_id` int(10) UNSIGNED NOT NULL,
+  `photo_name` varchar(255) NOT NULL,
+  `original_name` varchar(255) DEFAULT NULL,
+  `file_name` varchar(255) NOT NULL,
+  `file_path` varchar(500) NOT NULL,
+  `thumbnail_path` varchar(500) DEFAULT NULL,
+  `photo_description` text DEFAULT NULL,
+  `photo_date` date DEFAULT NULL,
+  `file_size` bigint(20) UNSIGNED DEFAULT NULL,
+  `mime_type` varchar(100) DEFAULT NULL,
+  `width` int(10) UNSIGNED DEFAULT NULL,
+  `height` int(10) UNSIGNED DEFAULT NULL,
+  `uploaded_by` int(10) UNSIGNED NOT NULL,
+  `status` enum('PENDING','APPROVED','REJECTED','PUBLISHED','HIDDEN') NOT NULL DEFAULT 'PENDING',
+  `download_count` int(10) UNSIGNED NOT NULL DEFAULT 0,
+  `view_count` int(10) UNSIGNED NOT NULL DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `photos`
+--
+
+INSERT INTO `photos` (`photo_id`, `project_id`, `photo_name`, `original_name`, `file_name`, `file_path`, `thumbnail_path`, `photo_description`, `photo_date`, `file_size`, `mime_type`, `width`, `height`, `uploaded_by`, `status`, `download_count`, `view_count`, `created_at`, `updated_at`) VALUES
+(2, 2, 'Codex Image Aug 25, 2026, 09_32_14 PM', 'Codex Image Aug 25, 2026, 09_32_14 PM.png', '20260825_184809_886de66aca8816ee96c18a895ffa9531.png', 'uploads/photos/20260825_184809_886de66aca8816ee96c18a895ffa9531.png', NULL, NULL, '2026-08-25', 1868388, 'image/png', 1536, 1024, 1, 'PENDING', 0, 0, '2026-08-25 16:48:09', '2026-08-25 16:48:09'),
+(3, 1, 'Screenshot 2569-08-24 at 17.20.34', 'Screenshot 2569-08-24 at 17.20.34.png', '20260825_184827_09a3b4ace29e4deec79a19b8b47450cb.png', 'uploads/photos/20260825_184827_09a3b4ace29e4deec79a19b8b47450cb.png', NULL, NULL, '2026-08-25', 1968077, 'image/png', 2880, 1800, 1, 'PENDING', 0, 0, '2026-08-25 16:48:27', '2026-08-25 16:48:27'),
+(4, 3, 'ps003', 'ps003.png', '20260825_192958_4ab8798f40acb234b5b01e8a03d77064.png', 'uploads/photos/20260825_192958_4ab8798f40acb234b5b01e8a03d77064.png', NULL, NULL, '2026-08-25', 281772, 'image/png', 564, 417, 1, 'PENDING', 0, 0, '2026-08-25 17:29:58', '2026-08-25 17:29:58');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `photo_tags`
+--
+
+CREATE TABLE `photo_tags` (
+  `tag_id` bigint(20) UNSIGNED NOT NULL,
+  `photo_id` bigint(20) UNSIGNED NOT NULL,
+  `tag_name` varchar(100) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `projects`
+--
+
+CREATE TABLE `projects` (
+  `project_id` int(10) UNSIGNED NOT NULL,
+  `project_name` varchar(255) NOT NULL,
+  `project_detail` text DEFAULT NULL,
+  `project_date` date NOT NULL,
+  `project_location` varchar(255) DEFAULT NULL,
+  `category_id` int(10) UNSIGNED DEFAULT NULL,
+  `created_by` int(10) UNSIGNED NOT NULL,
+  `status` enum('DRAFT','PENDING','APPROVED','PUBLISHED','REJECTED') NOT NULL DEFAULT 'DRAFT',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `projects`
+--
+
+INSERT INTO `projects` (`project_id`, `project_name`, `project_detail`, `project_date`, `project_location`, `category_id`, `created_by`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'กิจกรรมวันไหว้ครู ประจำปีการศึกษา 2569', 'กิจกรรมไหว้ครูและแสดงความกตัญญูกตเวทีของนักเรียน', '2026-06-30', 'โรงเรียนสาธิตมหาวิทยาลัยสงขลานครินทร์ (ฝ่ายมัธยมศึกษา)', 2, 1, 'PUBLISHED', '2026-08-25 15:43:39', '2026-08-25 16:30:31'),
+(2, 'กิจกรรมวันไหว้ครู ประจำปีการศึกษา 2569', NULL, '2026-08-27', '', 3, 1, 'DRAFT', '2026-08-25 16:40:01', '2026-08-25 16:40:01'),
+(3, 'ทดสอบ', NULL, '2026-08-28', '', 1, 1, 'DRAFT', '2026-08-25 17:29:46', '2026-08-25 17:29:46');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `full_name` varchar(150) NOT NULL,
+  `email` varchar(150) DEFAULT NULL,
+  `role` enum('ADMIN','STAFF','VIEWER','EXECUTIVE') NOT NULL DEFAULT 'STAFF',
+  `status` enum('ACTIVE','INACTIVE') NOT NULL DEFAULT 'ACTIVE',
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`user_id`, `username`, `password`, `full_name`, `email`, `role`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'admin', '$2y$10$Y2Hp4C8NwKcrt3/eo4YNhuIRIiF7BlLSlRBH3mkztgzDbC/8i9wc6', 'ผู้ดูแลระบบ', 'admin@satit.psu.ac.th', 'ADMIN', 'ACTIVE', '2026-08-25 23:19:32', '2026-08-25 23:19:32'),
+(2, 'staff', '$2y$10$.PW024t6hsC.243.k171juceU2vWYv.nFlkwkyzUdEGKCYOR/Gpb.', 'เจ้าหน้าที่', 'staff@satit.psu.ac.th', 'STAFF', 'ACTIVE', '2026-08-25 23:19:32', '2026-08-25 23:19:32'),
+(3, 'viewer', '$2y$10$kjAv5MNUWyjRCY.DMtv4WOrcZk9m2xWE4nrwGgH/wLVRyvSmKEsJi', 'ผู้ดูเว็บไซต์', 'viewer@satit.psu.ac.th', 'VIEWER', 'ACTIVE', '2026-08-25 23:19:32', '2026-08-25 23:19:32'),
+(4, 'executive', '$2y$10$fTPCMVeRDPx4MxaWxyRpKOYZNPptEAeXhq/x65CYP023.sRtawTmS', 'ผู้บริหาร', 'executive@satit.psu.ac.th', 'EXECUTIVE', 'ACTIVE', '2026-08-25 23:19:32', '2026-08-25 23:19:32');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `activity_logs`
+--
+ALTER TABLE `activity_logs`
+  ADD PRIMARY KEY (`log_id`),
+  ADD KEY `fk_logs_user` (`user_id`);
+
+--
+-- Indexes for table `approvals`
+--
+ALTER TABLE `approvals`
+  ADD PRIMARY KEY (`approval_id`),
+  ADD KEY `fk_approvals_photo` (`photo_id`),
+  ADD KEY `fk_approvals_user` (`approved_by`);
+
+--
+-- Indexes for table `categories`
+--
+ALTER TABLE `categories`
+  ADD PRIMARY KEY (`category_id`);
+
+--
+-- Indexes for table `photos`
+--
+ALTER TABLE `photos`
+  ADD PRIMARY KEY (`photo_id`),
+  ADD KEY `fk_photos_project` (`project_id`),
+  ADD KEY `fk_photos_user` (`uploaded_by`);
+
+--
+-- Indexes for table `photo_tags`
+--
+ALTER TABLE `photo_tags`
+  ADD PRIMARY KEY (`tag_id`),
+  ADD KEY `fk_tags_photo` (`photo_id`),
+  ADD KEY `idx_tag_name` (`tag_name`);
+
+--
+-- Indexes for table `projects`
+--
+ALTER TABLE `projects`
+  ADD PRIMARY KEY (`project_id`),
+  ADD KEY `fk_projects_category` (`category_id`),
+  ADD KEY `fk_projects_user` (`created_by`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`user_id`),
+  ADD UNIQUE KEY `uq_users_username` (`username`),
+  ADD UNIQUE KEY `uq_users_email` (`email`),
+  ADD KEY `idx_users_role` (`role`),
+  ADD KEY `idx_users_status` (`status`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `activity_logs`
+--
+ALTER TABLE `activity_logs`
+  MODIFY `log_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `approvals`
+--
+ALTER TABLE `approvals`
+  MODIFY `approval_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `categories`
+--
+ALTER TABLE `categories`
+  MODIFY `category_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `photos`
+--
+ALTER TABLE `photos`
+  MODIFY `photo_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `photo_tags`
+--
+ALTER TABLE `photo_tags`
+  MODIFY `tag_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `projects`
+--
+ALTER TABLE `projects`
+  MODIFY `project_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `activity_logs`
+--
+ALTER TABLE `activity_logs`
+  ADD CONSTRAINT `fk_logs_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `approvals`
+--
+ALTER TABLE `approvals`
+  ADD CONSTRAINT `fk_approvals_photo` FOREIGN KEY (`photo_id`) REFERENCES `photos` (`photo_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_approvals_user` FOREIGN KEY (`approved_by`) REFERENCES `users` (`user_id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `photos`
+--
+ALTER TABLE `photos`
+  ADD CONSTRAINT `fk_photos_project` FOREIGN KEY (`project_id`) REFERENCES `projects` (`project_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_photos_user` FOREIGN KEY (`uploaded_by`) REFERENCES `users` (`user_id`) ON UPDATE CASCADE;
+
+--
+-- Constraints for table `photo_tags`
+--
+ALTER TABLE `photo_tags`
+  ADD CONSTRAINT `fk_tags_photo` FOREIGN KEY (`photo_id`) REFERENCES `photos` (`photo_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `projects`
+--
+ALTER TABLE `projects`
+  ADD CONSTRAINT `fk_projects_category` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_projects_user` FOREIGN KEY (`created_by`) REFERENCES `users` (`user_id`) ON UPDATE CASCADE;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
